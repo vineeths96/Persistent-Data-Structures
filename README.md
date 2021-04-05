@@ -28,7 +28,13 @@
 
 ## About The Project
 
-This project implements a small library of persistent data structures in C. This library supports both partially and fully persistent versions of the data structures. The library includes the following data structures and all the usual operations on them.
+This project implements a small library of persistent data structures in C. A persistent data structure is a data structure that always preserves the previous version of itself when it is modified. They are effectively immutable, in the sense that their operations do not (visibly) update the
+structure in-place, but always produce a new updated version. A data structure is partially persistent if all versions can be accessed but only the newest version can be modified. The data structure is fully persistent if every version can be both accessed and modified. In this program, each node contains a modification box with a timestamp to hold a single modification. If more than modification is applied to a node, the node is split to create a new node with the latest values. Amortized O(1) time and space can be achieved for access and updates using this method. This method was originally given by Sleator, Tarjan et al. Each node contains a modification box that can hold:
+
+* One modification to the node (the modification could be of one of the pointers, or to the node’s key or to some other node-specific data)
+* The time instance (or version number) when the mod was applied. The timestamp is essential for tracing the path to the version of the node we care about.
+
+This library supports both partially and fully persistent versions of the data structures. The library includes the following data structures and all the usual operations on them.
 
 1. Heterogeneous vector (supports elements of different types)
 2. Map
@@ -38,7 +44,7 @@ This project implements a small library of persistent data structures in C. This
 6. Singly linked linked list
 7. Doubly linked linked list
 
-The library has separate directories for partial and full persistence. Within each directory, there are sub-directories --- each corresponding to a particular data structure. The program for each data structure is written in three files - `client.c`, `header.c`, and `implement.c`. Comments have been added frequently to help in understanding the logic behind implementation. The  `client.c` files contains some basic testing of the the persistence for the data structures. Refer [Problem statement](./Problem%20Statement.pdf) file for detailed information.
+The library has separate directories for partial and full persistence. Within each directory, there are sub-directories --- each corresponding to a particular data structure. The program for each data structure is written in three files - `client.c`, `header.c`, and `implement.c`. Comments have been added frequently to help in understanding the logic behind implementation. The`client.c` files contains some basic testing of the the persistence for the data structures. Refer [Problem statement](./Problem%20Statement.pdf) file for detailed information.
 
 
 
