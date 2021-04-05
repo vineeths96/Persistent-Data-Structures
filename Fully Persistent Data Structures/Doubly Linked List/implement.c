@@ -67,13 +67,11 @@ void int_print_list_fp(int_list_fp* list, int version)
       
       if((pCrawl->mod->version <= version) && (pCrawl->mod->version > UNUSED))
 	{
-	  //printf("dat %d, vers %d/////->", pCrawl->mod->data, pCrawl->mod->version);
 	  printf("%d->", pCrawl->mod->data);
 	  pCrawl = pCrawl->mod->next;
 	}
       else
 	{
-	  //printf("dat %d, vers %d/////->", pCrawl->data, pCrawl->node_version);
 	  printf("%d->", pCrawl->data);
 	  pCrawl = pCrawl->next;
 	}
@@ -93,7 +91,7 @@ int_Node* int_update_parentLeft_list_fp(int_list_fp* list, int_Node* lCrawl, int
       lCrawl->mod->data = lCrawl->data;
       lCrawl->mod->version = live_version;
       lCrawl->mod->next = newnode;
-      //lCrawl->mod->prev = lCrawl->prev;
+
       newnode->prev = lCrawl;
       lCrawl->mod->prev = int_update_parentLeft_list_fp(list, lCrawl->prev, lCrawl, live_version, version);
 	
@@ -131,23 +129,6 @@ int_Node* int_update_parentLeft_list_fp(int_list_fp* list, int_Node* lCrawl, int
 	  newnode_parent->prev = int_update_parentLeft_list_fp(list, lCrawl->prev, newnode_parent, live_version, version);
 	}
       
-
-      /*      if(lCrawl->mod->version <= version)
-	      newnode_parent = addNode(lCrawl->mod->data, live_version);
-	      else
-	      newnode_parent = addNode(lCrawl->data, live_version);
-      */
-      /*      newnode_parent->next = newnode;
-	      newnode->prev = newnode_parent;
-	      /*
-	      if(lCrawl->mod->prev == NULL)
-	      {
-	      list->head[live_version] = newnode_parent;
-	      return newnode_parent;
-	      }
-
-	      newnode_parent->prev = int_update_parentLeft_list_fp(list, lCrawl->mod->prev, newnode_parent, live_version, version);
-      */
       return newnode_parent;
     }
 
@@ -166,7 +147,7 @@ int_Node* int_update_parentRight_list_fp(int_list_fp* list, int_Node* lCrawl, in
       lCrawl->mod->data = lCrawl->data;
       lCrawl->mod->version = live_version;
       lCrawl->mod->prev = newnode;
-      //lCrawl->mod->next = lCrawl->next;
+
       newnode->next = lCrawl;
       lCrawl->mod->next =  int_update_parentRight_list_fp(list, lCrawl->next, lCrawl, live_version, version);
 
@@ -269,10 +250,6 @@ bool int_insert_list_fp(int_list_fp* list, int data, int index, int version)
   if(lCrawl->mod->version == UNUSED)
     {      
       live_version++;
-      
-      //lCrawl->mod->data = lCrawl->data;
-      //lCrawl->mod->version = live_version;
-
       newnode->node_version = live_version;
       
       if(index != 0)
@@ -304,11 +281,8 @@ bool int_insert_list_fp(int_list_fp* list, int data, int index, int version)
 	{
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("1\n");
 	      newnode->next = int_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
 	      newnode->prev = int_update_parentLeft_list_fp(list, lCrawl, newnode, live_version, version);
-
-	      //if(newnode->prev != NULL) printf("newnode prev %d vers %dn nernode vers %d\n", newnode->prev->data, newnode->prev->node_version, newnode->node_version);
 	    }
 	  else
 	    {
@@ -321,7 +295,6 @@ bool int_insert_list_fp(int_list_fp* list, int data, int index, int version)
 	  int_Node* trailNode;
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("2\n");
 	      trailNode = addNode(lCrawl->mod->data, live_version);
 	      trailNode->next = int_update_parentRight_list_fp(list, lCrawl->mod->next, trailNode, live_version, version);	
 	    }
@@ -432,34 +405,6 @@ bool int_update_list_fp(int_list_fp* list, int data, int index, int version)
 		
 	      list->head[live_version] = newnode;
 	    }
-
-	  /* 
-	     if(index != 0)
-	     {
-	     int_Node* newnode = addNode(data, live_version);
-
-	     if(lCrawl->node_version <= version)
-	     {
-	     newnode->next = int_update_parentRight_list_fp(list, lCrawl->next, newnode, live_version, version);
-	     newnode->prev = int_update_parentLeft_list_fp(list, lCrawl->prev, newnode, live_version, version);
-	     }
-	     else
-	     {
-	     newnode->next = int_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-	     newnode->prev = int_update_parentLeft_list_fp(list, lCrawl->mod->prev, newnode, live_version, version);
-	     }
-	     }
-	     else
-	     {
-	     int_Node* newnode = addNode(data, live_version);
-
-	     if(lCrawl->node_version <= version)
-	     newnode->next = int_update_parentRight_list_fp(list, lCrawl->next, newnode, live_version, version);
-	     else
-	     newnode->next = int_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-
-	     list->head[live_version] = newnode;
-	     }*/
 	}
 
       list->live_version = live_version;
@@ -548,7 +493,6 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	      else
 		{
 		  live_version++;
-		  /////////// if check
 		  int_Node* newnode;
 		  
 		  if(lCrawl->next->mod->version <= version)
@@ -582,7 +526,6 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	      else
 		{
 		  live_version++;
-
 		  int_Node* newnode;;
 
 		  if(lCrawl->mod->next->mod->version <= version)
@@ -620,8 +563,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else
 	    {
-	      live_version++;
-	   
+	      live_version++;	   
 	      int_Node* newnode;
 	      
 	      if(lCrawl->prev->mod->version <= version)
@@ -661,7 +603,6 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	  else
 	    {
 	      live_version++;
-
 	      int_Node* newnode;;
 
 	      if(lCrawl->mod->prev->mod->version <= version)
@@ -690,7 +631,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	  if((lCrawl->prev->mod->version == UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {  
 	      live_version++;
-	      //printf("1\n");
+	      
 	      lCrawl->prev->mod->data = lCrawl->prev->data;
 	      lCrawl->prev->mod->version = live_version;
 
@@ -708,7 +649,6 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	  else if((lCrawl->prev->mod->version == UNUSED) && (lCrawl->next->mod->version != UNUSED))
 	    {
 	      live_version++;
-	      //printf("2\n");
 	      int_Node* newnode;
 	      
 	      lCrawl->prev->mod->data = lCrawl->prev->data;
@@ -734,8 +674,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else if((lCrawl->prev->mod->version != UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {
-	      live_version++;
-	      //printf("3\n");
+	      live_version++;	      
 	      int_Node* newnode;
 	      
 	      lCrawl->next->mod->data = lCrawl->next->data;
@@ -763,8 +702,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else
 	    {
-	      live_version++;
-	      //printf("4\n");       
+	      live_version++;	            
 	      int_Node* newnode_prev;
 	      int_Node* newnode_next;
 
@@ -804,7 +742,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	  if((lCrawl->mod->prev->mod->version == UNUSED) && (lCrawl->mod->next->mod->version == UNUSED))
 	    {  
 	      live_version++;
-	      //printf("5\n");  
+	      
 	      lCrawl->mod->prev->mod->data = lCrawl->mod->prev->data;
 	      lCrawl->mod->prev->mod->version = live_version;
 
@@ -821,8 +759,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else if((lCrawl->mod->prev->mod->version == UNUSED) && (lCrawl->mod->next->mod->version != UNUSED))
 	    {
-	      live_version++;
-	      //printf("6\n"); 	      	  
+	      live_version++;	      	      	  
 	      int_Node* newnode;
 
 	      lCrawl->mod->prev->mod->data = lCrawl->mod->prev->data;
@@ -849,8 +786,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else if((lCrawl->mod->prev->mod->version != UNUSED) && (lCrawl->mod->next->mod->version == UNUSED))
 	    {
-	      live_version++;
-	      //printf("7\n");	      	      
+	      live_version++;	            	      
 	      int_Node* newnode;       
 
 	      lCrawl->mod->next->mod->data = lCrawl->mod->next->data;
@@ -878,8 +814,7 @@ bool int_delete_list_fp(int_list_fp* list, int index, int version)
 	    }
 	  else
 	    {
-	      live_version++;
-	      //printf("8\n");	        
+	      live_version++;	          
 	      int_Node* newnode_prev;
 	      int_Node* newnode_next;
 

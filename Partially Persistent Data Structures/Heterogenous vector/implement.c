@@ -651,9 +651,9 @@ bool het_update_list_pp(het_list_pp* list, char str[], int index)
 	}
       else
 	{
-	  live_version++;
-	  
+	  live_version++;	  
 	  het_Node* newnode;
+	  
 	  switch(str[0])
 	    {
 	    case 'i': {
@@ -803,8 +803,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	      else
 		{
 		  live_version++;
-
 		  het_Node* newnode;
+		  
 		  switch(lCrawl->next->mod->identifier[0])
 		    {
 		    case 'i': {
@@ -875,8 +875,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	      else
 		{
 		  live_version++;
-
 		  het_Node* newnode;
+		  
 		  switch(lCrawl->mod->next->mod->identifier[0])
 		    {
 		    case 'i': {
@@ -952,8 +952,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	  else
 	    {
 	      live_version++;
-
 	      het_Node* newnode;
+	      
 	      switch(lCrawl->prev->mod->identifier[0])
 		{
 		case 'i': {
@@ -1026,8 +1026,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	  else
 	    {
 	      live_version++;
-
 	      het_Node* newnode;
+	      
 	      switch(lCrawl->mod->prev->mod->identifier[0])
 		{
 		case 'i': {
@@ -1197,8 +1197,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	  else if((lCrawl->prev->mod->version != UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {
 	      live_version++;
-
 	      het_Node* newnode;
+	      
 	      switch(lCrawl->prev->mod->identifier[0])
 		{
 		case 'i': {
@@ -1259,9 +1259,9 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	    }
 	  else
 	    {
-	      live_version++;
-        
+	      live_version++;        
 	      het_Node* newnode_prev;
+	      
 	      switch(lCrawl->prev->mod->identifier[0])
 		{
 		case 'i': {
@@ -1519,8 +1519,8 @@ bool het_delete_list_pp(het_list_pp* list, int index)
 	  else
 	    {
 	      live_version++;
-
 	      het_Node* newnode_prev;
+	      
 	      switch(lCrawl->mod->prev->mod->identifier[0])
 		{
 		case 'i': {

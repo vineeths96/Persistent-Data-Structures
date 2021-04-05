@@ -95,8 +95,7 @@ int_Node* int_update_parentLeft_list_pp(int_list_pp* list, int_Node* lCrawl, int
     }
   else
     {
-      int_Node* newnode_parent = addNode(lCrawl->mod->data);
-    
+      int_Node* newnode_parent = addNode(lCrawl->mod->data);    
       newnode_parent->next = newnode;
 
       if(lCrawl->mod->prev == NULL)
@@ -128,12 +127,8 @@ int_Node* int_update_parentRight_list_pp(int_list_pp* list, int_Node* lCrawl, in
     }
   else
     {
-      int_Node* newnode_parent = addNode(lCrawl->mod->data);
- 
-      newnode_parent->prev = newnode;
-
-      // if(lCrawl->mod->next == NULL) return newnode_parent;
-	
+      int_Node* newnode_parent = addNode(lCrawl->mod->data); 
+      newnode_parent->prev = newnode;	
       newnode_parent->next = int_update_parentRight_list_pp(list, lCrawl->mod->next, newnode_parent, live_version);
     }
 
@@ -170,7 +165,6 @@ bool int_insert_list_pp(int_list_pp* list, int data, int index)
  
   for(lCrawl = list->head[live_version], lCrawl_prev = list->head[live_version]; lCrawl != NULL; index_count++)
     {
-      // Check here redundancy
       if(lCrawl != list->head[live_version])
 	lCrawl_prev = lCrawl->prev;
       
@@ -406,7 +400,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	      else
 		{
 		  live_version++;
-
 		  int_Node* newnode = addNode(lCrawl->next->mod->data);
 
 		  newnode->next = int_update_parentRight_list_pp(list, lCrawl->next->mod->next, newnode, live_version);
@@ -431,7 +424,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	      else
 		{
 		  live_version++;
-
 		  int_Node* newnode = addNode(lCrawl->mod->next->mod->data);
 
 		  newnode->next = int_update_parentRight_list_pp(list, lCrawl->mod->next->mod->next, newnode, live_version);
@@ -461,7 +453,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	  else
 	    {
 	      live_version++;
-
 	      int_Node* newnode = addNode(lCrawl->prev->mod->data);
 	      
 	      newnode->prev = int_update_parentLeft_list_pp(list, lCrawl->prev->mod->prev, newnode, live_version);
@@ -488,7 +479,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	  else
 	    {
 	      live_version++;
-
 	      int_Node* newnode = addNode(lCrawl->mod->prev->mod->data);
 	      
 	      newnode->prev = int_update_parentLeft_list_pp(list, lCrawl->mod->prev->mod->prev, newnode, live_version);
@@ -522,7 +512,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	  else if((lCrawl->prev->mod->version == UNUSED) && (lCrawl->next->mod->version != UNUSED))
 	    {
 	      live_version++;
-
 	      int_Node* newnode = addNode(lCrawl->next->mod->data);
 	      
 	      lCrawl->prev->mod->data = lCrawl->prev->data;
@@ -539,7 +528,6 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	  else if((lCrawl->prev->mod->version != UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {
 	      live_version++;
-
 	      int_Node* newnode = addNode(lCrawl->prev->mod->data);
 	      
 	      lCrawl->next->mod->data = lCrawl->next->data;
@@ -587,8 +575,7 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	    }
 	  else if((lCrawl->mod->prev->mod->version == UNUSED) && (lCrawl->mod->next->mod->version != UNUSED))
 	    {
-	      live_version++;
-	      	  
+	      live_version++;	      	  
 	      int_Node* newnode = addNode(lCrawl->mod->next->mod->data);
 	  
 	      lCrawl->mod->prev->mod->data = lCrawl->mod->prev->data;
@@ -604,8 +591,7 @@ bool int_delete_list_pp(int_list_pp* list, int index)
 	    }
 	  else if((lCrawl->mod->prev->mod->version != UNUSED) && (lCrawl->mod->next->mod->version == UNUSED))
 	    {
-	      live_version++;
-	      
+	      live_version++;	      
 	      int_Node* newnode = addNode(lCrawl->mod->prev->mod->data);       
 
 	      lCrawl->mod->next->mod->data = lCrawl->mod->next->data;

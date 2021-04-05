@@ -262,7 +262,7 @@ het_Node* het_update_parentLeft_list_fp(het_list_fp* list, het_Node* lCrawl, het
 
       lCrawl->mod->version = live_version;
       lCrawl->mod->next = newnode;
-      //lCrawl->mod->prev = lCrawl->prev;
+      
       newnode->prev = lCrawl;
       lCrawl->mod->prev = het_update_parentLeft_list_fp(list, lCrawl->prev, lCrawl, live_version, version);
       
@@ -272,40 +272,6 @@ het_Node* het_update_parentLeft_list_fp(het_list_fp* list, het_Node* lCrawl, het
   else
     {
       het_Node* newnode_parent;
-      /*      switch(lCrawl->mod->identifier[0])
-	      {
-	      case 'i': {
-	      newnode_parent = int_addNode(lCrawl->mod->int_data, live_version);
-	      break;
-	      }
-	      case 'f': {
-	      newnode_parent = float_addNode(lCrawl->mod->float_data, live_version);
-	      break;
-	      }
-	      case 'c': {
-	      newnode_parent = char_addNode(lCrawl->mod->char_data, live_version);
-	      break;
-	      }
-	      case 'd': {
-	      newnode_parent = double_addNode(lCrawl->mod->double_data, live_version);
-	      break;
-	      }
-	      default: {
-	      ;
-	      }
-	      }
-       
-	      newnode_parent->next = newnode;
-
-	      if(lCrawl->mod->prev == NULL)
-	      {
-	      list->head[live_version] = newnode_parent;
-	      return newnode_parent;
-	      }
-      
-	      newnode_parent->prev = het_update_parentLeft_list_fp(list, lCrawl->mod->prev, newnode_parent, live_version, version);
-      */
-
                 
       if(lCrawl->mod->version <= version)
 	{
@@ -377,7 +343,6 @@ het_Node* het_update_parentLeft_list_fp(het_list_fp* list, het_Node* lCrawl, het
 
 	  newnode_parent->prev = het_update_parentLeft_list_fp(list, lCrawl->prev, newnode_parent, live_version, version);
 	}
-   
 
       return newnode_parent;
     }
@@ -426,7 +391,6 @@ het_Node* het_update_parentRight_list_fp(het_list_fp* list, het_Node* lCrawl, he
 
       lCrawl->mod->version = live_version;
       lCrawl->mod->prev = newnode;
-      //lCrawl->mod->next = lCrawl->next;
       lCrawl->mod->next =  het_update_parentRight_list_fp(list, lCrawl->next, lCrawl, live_version, version);
 
       return lCrawl;
@@ -434,36 +398,7 @@ het_Node* het_update_parentRight_list_fp(het_list_fp* list, het_Node* lCrawl, he
   else
     {
       het_Node* newnode_parent;
-      
-      /*      switch(lCrawl->mod->identifier[0])
-	      {
-	      case 'i': {
-	      newnode_parent = int_addNode(lCrawl->mod->int_data, live_version);
-	      break;
-	      }
-	      case 'f': {
-	      newnode_parent = float_addNode(lCrawl->mod->float_data, live_version);
-	      break;
-	      }
-	      case 'c': {
-	      newnode_parent = char_addNode(lCrawl->mod->char_data, live_version);
-	      break;
-	      }
-	      case 'd': {
-	      newnode_parent = double_addNode(lCrawl->mod->double_data, live_version);
-	      break;
-	      }
-	      default: {
-	      ;
-	      }
-	      }
-
-	      newnode_parent->next = het_update_parentRight_list_fp(list, lCrawl->mod->next, newnode_parent, live_version, version);
-
-	      newnode_parent->prev = newnode;
-      */
-
-      
+            
       if(lCrawl->mod->version <= version)
 	{	  
 	  
@@ -631,35 +566,7 @@ bool het_insert_list_fp(het_list_fp* list, char str[], int index, int version)
   if(lCrawl->mod->version == UNUSED)
     {      
       live_version++;
-      // Comment block 
-      /*  switch(lCrawl->identifier[0])
-	  {
-	  case 'i': {
-	  lCrawl->mod->int_data = lCrawl->int_data;
-	  lCrawl->mod->identifier = "int";
-	  break;
-	  }
-	  case 'f': {
-	  lCrawl->mod->float_data = lCrawl->float_data;
-	  lCrawl->mod->identifier = "float";
-	  break;
-	  }
-	  case 'c': {
-	  lCrawl->mod->char_data = lCrawl->char_data;
-	  lCrawl->mod->identifier = "char";
-	  break;
-	  }
-	  case 'd': {
-	  lCrawl->mod->double_data = lCrawl->double_data;
-	  lCrawl->mod->identifier = "double";
-	  break;
-	  }
-	  default: {
-	  ;
-	  }
-	  }
-      */
-      //lCrawl->mod->version = live_version;
+
       newnode->node_version = live_version;
       
       if(index != 0)
@@ -687,15 +594,10 @@ bool het_insert_list_fp(het_list_fp* list, char str[], int index, int version)
             	
       if(index !=0)
 	{
-	  // newnode->next = het_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-	  //newnode->prev = het_update_parentLeft_list_fp(list, lCrawl, newnode, live_version, version);
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("1\n");
 	      newnode->next = het_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
 	      newnode->prev = het_update_parentLeft_list_fp(list, lCrawl, newnode, live_version, version);
-
-	      //if(newnode->prev != NULL) printf("newnode prev %d vers %dn nernode vers %d\n", newnode->prev->data, newnode->prev->node_version, newnode->node_version);
 	    }
 	  else
 	    {
@@ -706,37 +608,9 @@ bool het_insert_list_fp(het_list_fp* list, char str[], int index, int version)
       else
 	{
 	  het_Node* trailNode;
-	  /*	  switch(lCrawl->mod->identifier[0])
-		  {
-		  case 'i': {
-		  trailNode = int_addNode(lCrawl->mod->int_data, live_version);
-		  break;
-		  }
-		  case 'f': {
-		  trailNode = float_addNode(lCrawl->mod->float_data, live_version);
-		  break;
-		  }
-		  case 'c': {
-		  trailNode = char_addNode(lCrawl->mod->char_data, live_version);
-		  break;
-		  }
-		  case 'd': {
-		  trailNode = double_addNode(lCrawl->mod->double_data, live_version);
-		  break;
-		  }
-		  default: {
-		  ;
-		  }
-		  }
-
-		  //trailNode->next = lCrawl->mod->next;
-		  // Check here
-		  trailNode->next = het_update_parentRight_list_fp(list, lCrawl->mod->next, trailNode, live_version, version);
-	  */
 
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("2\n");
 	      switch(lCrawl->mod->identifier[0])
 		{
 		case 'i': {
@@ -930,7 +804,6 @@ bool het_update_list_fp(het_list_fp* list, char str[], int index, int version)
 	    }
 	    }  
   
-	  
 	  if(index != 0)
 	    {
 	      if(lCrawl->mod->version <= version)
@@ -1546,6 +1419,7 @@ bool het_delete_list_fp(het_list_fp* list, int index, int version)
 		  ;
 		}
 		}
+		
 	      het_Node* newnode; 
 
 	      lCrawl->prev->mod->version = live_version;
@@ -1710,7 +1584,6 @@ bool het_delete_list_fp(het_list_fp* list, int index, int version)
 	  else
 	    {
 	      live_version++;
-        
 	      het_Node* newnode_prev;
 	      het_Node* newnode_next;
 
@@ -2097,7 +1970,6 @@ bool het_delete_list_fp(het_list_fp* list, int index, int version)
 	  else
 	    {
 	      live_version++;
-
 	      het_Node* newnode_prev;
 	      het_Node* newnode_next;
 
@@ -2216,7 +2088,6 @@ bool het_delete_list_fp(het_list_fp* list, int index, int version)
 		  newnode_next->next = het_update_parentRight_list_fp(list, lCrawl->mod->next->next, newnode_next, live_version, version);
 		}
 	    
-	
 	      newnode_prev->next = newnode_next;
 	      newnode_next->prev = newnode_prev;
 	    }

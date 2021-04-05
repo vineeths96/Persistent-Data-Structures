@@ -7,8 +7,6 @@
 map_Node* addNode(char input_key[], char input_value[], int version)
 {
   map_Node* newnode = (map_Node*) malloc(sizeof(map_Node));
-  // newnode->key = malloc(sizeof(STR_SIZE));
-  // newnode->value = malloc(sizeof(STR_SIZE));
   strcpy(newnode->key, input_key);
   strcpy(newnode->value, input_value);
   newnode->next = NULL;
@@ -16,8 +14,6 @@ map_Node* addNode(char input_key[], char input_value[], int version)
   newnode->node_version = version;
   
   newnode->mod = (map_Mod*) malloc(sizeof(map_Mod));
-  //  newnode->mod->key = malloc(sizeof(STR_SIZE));
-  //  newnode->mod->value = malloc(sizeof(STR_SIZE));
   strcpy(newnode->mod->key, JUNK);
   strcpy(newnode->mod->value, JUNK);
   newnode->mod->version = UNUSED;
@@ -154,7 +150,6 @@ map_Node* map_update_parentLeft_list_fp(map_fp* list, map_Node* lCrawl, map_Node
       
       lCrawl->mod->version = live_version;
       lCrawl->mod->next = newnode;
-      //lCrawl->mod->prev = lCrawl->prev;
       lCrawl->mod->prev = map_update_parentLeft_list_fp(list, lCrawl->prev, lCrawl, live_version, version);
  
       list->head[live_version] = list->head[version];
@@ -163,20 +158,7 @@ map_Node* map_update_parentLeft_list_fp(map_fp* list, map_Node* lCrawl, map_Node
   else
     {
       map_Node* newnode_parent;
-      /* map_Node* newnode_parent = addNode(lCrawl->mod->key, lCrawl->mod->value, live_version);
-    
-	 newnode_parent->next = newnode;
-
-	 if(lCrawl->mod->prev == NULL)
-	 {
-	 list->head[live_version] = newnode_parent;
-	 return newnode_parent;
-	 }
-
-	 newnode_parent->prev = map_update_parentLeft_list_fp(list, lCrawl->mod->prev, newnode_parent, live_version, version);
-      */
-
-                      
+        
       if(lCrawl->mod->version <= version)
 	{
 	  newnode_parent = addNode(lCrawl->mod->key, lCrawl->mod->value, live_version);
@@ -223,7 +205,6 @@ map_Node* map_update_parentRight_list_fp(map_fp* list, map_Node* lCrawl, map_Nod
             
       lCrawl->mod->version = live_version;
       lCrawl->mod->prev = newnode;
-      //lCrawl->mod->next = lCrawl->next;
       newnode->next = lCrawl;
       lCrawl->mod->next =  map_update_parentRight_list_fp(list, lCrawl->next, lCrawl, live_version, version);
       
@@ -232,12 +213,6 @@ map_Node* map_update_parentRight_list_fp(map_fp* list, map_Node* lCrawl, map_Nod
   else
     {
       map_Node* newnode_parent;
-      /* map_Node* newnode_parent = addNode(lCrawl->mod->key, lCrawl->mod->value, live_version);
-
-	 newnode_parent->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, newnode_parent, live_version, version);
-
-	 newnode_parent->prev = newnode;
-      */
 
       if(lCrawl->mod->version <= version)
 	{	  
@@ -337,10 +312,6 @@ bool map_insert_fp(map_fp* list, char str[], int index, int version)
   if(lCrawl->mod->version == UNUSED)
     {      
       live_version++;
-      
-      //lCrawl->mod->data = lCrawl->data;
-      //lCrawl->mod->version = live_version;
-
       newnode->node_version = live_version;
       
       if(index != 0)
@@ -373,15 +344,10 @@ bool map_insert_fp(map_fp* list, char str[], int index, int version)
 
       if(index !=0)
 	{
-	  /* newnode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-	     newnode->prev = map_update_parentLeft_list_fp(list, lCrawl, newnode, live_version, version);*/
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("1\n");
 	      newnode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
 	      newnode->prev = map_update_parentLeft_list_fp(list, lCrawl, newnode, live_version, version);
-
-	      //if(newnode->prev != NULL) printf("newnode prev %d vers %dn nernode vers %d\n", newnode->prev->data, newnode->prev->node_version, newnode->node_version);
 	    }
 	  else
 	    {
@@ -392,19 +358,9 @@ bool map_insert_fp(map_fp* list, char str[], int index, int version)
       else
 	{
 	  map_Node* trailNode;
-	  /*	  map_Node* trailNode = addNode(lCrawl->mod->key, lCrawl->mod->value, live_version);
-	 
-		  trailNode->prev = newnode;
-		  trailNode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, trailNode, live_version, version);	
-	  
-		  newnode->next = trailNode;
-  	  
-		  list->head[live_version] = newnode;
-	  */
-	  
+
 	  if(lCrawl->mod->version <= version)
 	    {
-	      //printf("2\n");
 	      trailNode = addNode(lCrawl->mod->key, lCrawl->mod->value, live_version);
 	      trailNode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, trailNode, live_version, version);	
 	    }
@@ -525,34 +481,6 @@ bool map_update_fp(map_fp* list, char str[], int index, int version)
 		
 	      list->head[live_version] = newnode;
 	    }
-
-	  /* 
-	     if(index != 0)
-	     {
-	     map_Node* newnode = addNode(data, live_version);
-
-	     if(lCrawl->node_version <= version)
-	     {
-	     newnode->next = map_update_parentRight_list_fp(list, lCrawl->next, newnode, live_version, version);
-	     newnode->prev = map_update_parentLeft_list_fp(list, lCrawl->prev, newnode, live_version, version);
-	     }
-	     else
-	     {
-	     newnode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-	     newnode->prev = map_update_parentLeft_list_fp(list, lCrawl->mod->prev, newnode, live_version, version);
-	     }
-	     }
-	     else
-	     {
-	     map_Node* newnode = addNode(data, live_version);
-
-	     if(lCrawl->node_version <= version)
-	     newnode->next = map_update_parentRight_list_fp(list, lCrawl->next, newnode, live_version, version);
-	     else
-	     newnode->next = map_update_parentRight_list_fp(list, lCrawl->mod->next, newnode, live_version, version);
-
-	     list->head[live_version] = newnode;
-	     }*/
 	}
 
       list->live_version = live_version;
@@ -643,7 +571,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	      else
 		{
 		  live_version++;
-		  /////////// if check
 		  map_Node* newnode;
 		  
 		  if(lCrawl->next->mod->version <= version)
@@ -679,7 +606,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	      else
 		{
 		  live_version++;
-
 		  map_Node* newnode;;
 
 		  if(lCrawl->mod->next->mod->version <= version)
@@ -719,7 +645,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  else
 	    {
 	      live_version++;
-
 	      map_Node* newnode;
 	      
 	      if(lCrawl->prev->mod->version <= version)
@@ -760,8 +685,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  else
 	    {
 	      live_version++;
-
-	      map_Node* newnode;;
+	      map_Node* newnode;
 
 	      if(lCrawl->mod->prev->mod->version <= version)
 		{
@@ -789,7 +713,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  if((lCrawl->prev->mod->version == UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {  
 	      live_version++;
-	      //printf("1\n");
 
 	      strcpy(lCrawl->prev->mod->key, lCrawl->prev->key);
 	      strcpy(lCrawl->prev->mod->value, lCrawl->prev->value);
@@ -810,7 +733,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  else if((lCrawl->prev->mod->version == UNUSED) && (lCrawl->next->mod->version != UNUSED))
 	    {
 	      live_version++;
-	      //printf("2\n");
 	      map_Node* newnode;
 	      
 	      strcpy(lCrawl->prev->mod->key, lCrawl->prev->key);
@@ -838,7 +760,6 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  else if((lCrawl->prev->mod->version != UNUSED) && (lCrawl->next->mod->version == UNUSED))
 	    {
 	      live_version++;
-	      //printf("3\n");
 	      map_Node* newnode;
 	      
 	      strcpy(lCrawl->next->mod->key, lCrawl->next->key);
@@ -867,8 +788,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	    }
 	  else
 	    {
-	      live_version++;
-	      //printf("4\n");       
+	      live_version++;     
 	      map_Node* newnode_prev;
 	      map_Node* newnode_next;
 
@@ -908,7 +828,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	  if((lCrawl->mod->prev->mod->version == UNUSED) && (lCrawl->mod->next->mod->version == UNUSED))
 	    {  
 	      live_version++;
-	      //printf("5\n");  
+	      
 	      strcpy(lCrawl->mod->prev->mod->key, lCrawl->mod->prev->key);
 	      strcpy(lCrawl->mod->prev->mod->value, lCrawl->mod->prev->value);
 	      
@@ -928,8 +848,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	    }
 	  else if((lCrawl->mod->prev->mod->version == UNUSED) && (lCrawl->mod->next->mod->version != UNUSED))
 	    {
-	      live_version++;
-	      //printf("6\n"); 	      	  
+	      live_version++;	      	  
 	      map_Node* newnode;
 
 	      strcpy(lCrawl->mod->prev->mod->key, lCrawl->mod->prev->key);
@@ -958,8 +877,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	    }
 	  else if((lCrawl->mod->prev->mod->version != UNUSED) && (lCrawl->mod->next->mod->version == UNUSED))
 	    {
-	      live_version++;
-	      //printf("7\n");	      	      
+	      live_version++;     	      
 	      map_Node* newnode;       
 
 	      strcpy(lCrawl->mod->next->mod->key, lCrawl->mod->next->key);
@@ -988,8 +906,7 @@ bool map_delete_fp(map_fp* list, int index, int version)
 	    }
 	  else
 	    {
-	      live_version++;
-	      //printf("8\n");	        
+	      live_version++;       
 	      map_Node* newnode_prev;
 	      map_Node* newnode_next;
 
